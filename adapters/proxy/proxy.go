@@ -1,6 +1,7 @@
 package proxy
 
 import (
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -60,6 +61,9 @@ func (pr *Rotator) RoundTrip(req *http.Request) (*http.Response, error) {
 
 		transport = &http.Transport{
 			Proxy: http.ProxyURL(proxyURL),
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: false,
+			},
 		}
 
 		pr.cache.Store(next.URL, transport)
